@@ -5,7 +5,7 @@ from support import import_folder
 class Player(pygame.sprite.Sprite):
     def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack):
         super().__init__(groups)
-        self.image = pygame.image.load('.\\graphics\\character.png').convert_alpha()
+        self.image = pygame.image.load('.\\graphics\\player\\up\\up_0.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(0,-26)
 
@@ -80,8 +80,8 @@ class Player(pygame.sprite.Sprite):
                 self.can_switch_weapon = False
                 self.weapon_switch_time = pygame.time.get_ticks()
 
-                if self.weapon_index < len(list(weapon_data.keys())) - 1:
-                    self.weapon_index += 1
+                if self.weapon_index == 0:
+                    self.weapon_index = 1
                 else:
                     self.weapon = 0
 
@@ -91,10 +91,10 @@ class Player(pygame.sprite.Sprite):
                 self.can_switch_weapon = False
                 self.weapon_switch_time = pygame.time.get_ticks()
 
-                if self.weapon_index < len(list(weapon_data.keys())) - 1:
-                    self.weapon_index -= 1
+                if self.weapon_index == 1:
+                    self.weapon_index = 0
                 else:
-                    self.weapon = len(list(weapon_data.keys())) - 1
+                    self.weapon = 1
 
                 self.weapon = list(weapon_data.keys())[self.weapon_index]
 
