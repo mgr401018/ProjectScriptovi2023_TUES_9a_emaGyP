@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.image.load('.\\graphics\\player\\up\\up_0.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(0,-26)
+        self.hitbox = self.rect.inflate(-5,0)
 
         self.import_player_assets()
         self.status = 'down'
@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.animation_speed = 0.15
 
         self.direction = pygame.math.Vector2()
-        self.speed = 10
+        self.speed = 5
         self.attacking = False
         self.attack_cooldown = 400
         self.attcak_time = None

@@ -20,7 +20,7 @@ class Level():
 
     def create_map(self):
         layouts = {
-            'boundary': import_csv_layout('.\\temp-map\\map_FloorBlocks.csv'),
+            'boundary': import_csv_layout('.\\temp-map\\FloorBlocks.csv'),
             'grass': import_csv_layout('.\\temp-map\\map_Grass.csv'),
             'object': import_csv_layout('.\\temp-map\\map_Objects.csv')
         }
@@ -36,13 +36,13 @@ class Level():
                         y = row_index * TILESIZE
                         if style == 'boundary':
                             Tile((x,y),[self.obstacle_sprites],'invisible')
-                        if style == 'grass':
-                            random_grass_image = choice(graphics['grass'])
-                            Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'grass',random_grass_image)
-                        if style == 'object':
-                            surf = graphics['objects'][int(col)]
-                            Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'object',surf)
-        self.player = Player((2000,1430),[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack)
+                        #if style == 'grass':
+                        #    random_grass_image = choice(graphics['grass'])
+                        #    Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'grass',random_grass_image)
+                        #if style == 'object':
+                        #    surf = graphics['objects'][int(col)]
+                        #    Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'object',surf)
+        self.player = Player((1000,430),[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack)
 
     def create_attack(self):
         self.current_attack = Weapon(self.player,[self.visible_sprites])
