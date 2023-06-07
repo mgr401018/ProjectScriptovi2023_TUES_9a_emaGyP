@@ -3,4 +3,6 @@
 - better ui
 - magic
 - better death
-- more enemies
+- more and better enemies
+- remove unused stuff
+- particles
