@@ -4,7 +4,7 @@ from entity import Entity
 from support import *
 
 class Enemy(Entity):
-    def __init__(self,monster_name,pos,groups,obstacle_sprites):
+    def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player):
         super().__init__(groups)
         self.sprite_type = 'enemy'
         
@@ -29,6 +29,7 @@ class Enemy(Entity):
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
+        self.damage_player = damage_player
 
         self.vulnarable = True
         self.hit_time = None
@@ -65,23 +66,33 @@ class Enemy(Entity):
     def actions(self,player):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
+            self.damage_player(self.attack_damage)
         elif self.status == 'move': self.direction = self.get_player_distance_direction(player)[1]
         else: self.direction = pygame.math.Vector2()
 
     def cooldown(self):
+        current_time = pygame.time.get_ticks()
         if not self.can_attack:
-            current_time = pygame.time.get_ticks()
             if current_time - self.attack_time >= self.attack_cooldown:
                 self.can_attack = True
+        if not self.vulnarable:
+            if current_time - self.hit_time >= self.invincibility_duration:
+                self.vulnarable = True
 
     def get_damage(self,player):
         if self.vulnarable:
+            self.direction = self.get_player_distance_direction(player)[1]
             self.health -= player.get_full_weapon_damage()
+            self.hit_time = pygame.time.get_ticks()
             self.vulnarable = False
 
     def check_death(self):
         if self.health <=0:
             self.kill()
+
+    def hit_reaction(self):
+        if not self.vulnarable:
+            self.direction *= -self.resistance
 
     def animate(self):
         animation = self.animations[self.status]
@@ -93,8 +104,15 @@ class Enemy(Entity):
         
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
+
+        if not self.vulnarable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
     
     def update(self):
+        self.hit_reaction()
         self.move(self.speed)
         self.animate()
         self.cooldown()
