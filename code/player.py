@@ -1,4 +1,4 @@
-import pygame
+import pygame,sys
 from settings import *
 from support import import_folder
 from entity import Entity
@@ -155,12 +155,18 @@ class Player(Entity):
         else:
             self.image.set_alpha(255)
 
+    def check_death(self):
+        if self.health <=0:
+            pygame.quit()
+            sys.exit()
+
     def get_full_weapon_damage(self):
         base_damage = self.stats['attack']
         weapon_damage = weapon_data[self.weapon]['damage']
         return base_damage + weapon_damage
 
     def update(self):
+        self.check_death()
         self.input()
         self.cooldowns()
         self.get_status()
