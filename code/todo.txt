@@ -1,0 +1,6 @@
+- fix lag
+- heal pot
+- better ui
+- magic
+- better death
+- more enemies
