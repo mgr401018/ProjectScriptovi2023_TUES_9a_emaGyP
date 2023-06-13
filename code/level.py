@@ -2,12 +2,13 @@ import pygame
 from settings import *
 from tile import Tile
 from player import Player
-from debug import debug
 from support import *
 from random import choice
 from weapon import Weapon
 from ui import UI
 from enemy import Enemy
+from particles import AnimationPlayer
+from magic import MagicPlayer
 
 class Level():
     def __init__(self):
@@ -23,15 +24,14 @@ class Level():
         self.create_map()
 
         self.ui = UI()
+        
+        self.animation_player = AnimationPlayer()
+        self.magic_player = MagicPlayer(self.animation_player)
 
     def create_map(self):
         layouts = {
-            'boundary': import_csv_layout('.\\temp-map\\FloorBlocks.csv'),
-            'entities': import_csv_layout('.\\temp-map\\Entities.csv')
-        }
-        graphics = {
-            'grass': import_folder('.\\temp-graphics\\grass'),
-            'objects': import_folder('.\\temp-graphics\\objects')
+            'boundary': import_csv_layout('.\\map\\FloorBlocks.csv'),
+            'entities': import_csv_layout('.\\map\\Entities.csv')
         }
         for style,layout in layouts.items():
             for row_index,row in enumerate(layout):
@@ -43,7 +43,7 @@ class Level():
                             Tile((x,y),[self.obstacle_sprites],'invisible')
                         if style == 'entities':
                             if col == '6':
-                                self.player = Player((x,y),[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack)
+                                self.player = Player((x,y),[self.visible_sprites],self.obstacle_sprites,self.create_attack,self.destroy_attack,self.create_magic)
                             else:
                                 if col == '0': monster_name = 'bat'
                                 elif col == '12': monster_name = 'orc'
@@ -51,6 +51,14 @@ class Level():
 
     def create_attack(self):
         self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
+
+    def create_magic(self,style,strength,cost):
+        if style == 'heal':
+            self.magic_player.heal(self.player,strength,cost,[self.visible_sprites])
+        
+        if style == 'flame':
+            self.magic_player.flame(self.player,cost,[self.visible_sprites,self.attack_sprites])
+        
 
     def destroy_attack(self):
         if self.current_attack:
@@ -63,7 +71,7 @@ class Level():
                 collision_sprites = pygame.sprite.spritecollide(attack_sprite,self.attackable_sprites,False)
                 if collision_sprites:
                     for target_sprite in collision_sprites:
-                        target_sprite.get_damage(self.player)
+                        target_sprite.get_damage(self.player,attack_sprite.sprite_type)
 
     def damage_player(self,amount):
         if self.player.vulnarable:
@@ -77,7 +85,6 @@ class Level():
         self.visible_sprites.enemy_update(self.player)
         self.player_attack_logic()
         self.ui.display(self.player)
-        #debug(self.player.health)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
@@ -86,7 +93,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.half_widht = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
-        self.floor_surf = pygame.image.load('.\\temp-graphics\\tilemap\\ground.png').convert()
+        self.floor_surf = pygame.image.load('.\\graphics\\ground.png').convert()
         self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
         
     def custom_draw(self,player):

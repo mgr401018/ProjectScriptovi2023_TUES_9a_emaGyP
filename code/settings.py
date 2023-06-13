@@ -21,9 +21,15 @@ UI_BORDER_COLOR_ACTIVE = 'gold'
 
 weapon_data = {
     'sword': {'cooldown': 100, 'damage': 15,'graphic':'.\\graphics\\weapons\\sword\\full.png'},
-    'rapier':{'cooldown': 50, 'damage': 8, 'graphic':'.\\graphics\\weapons\\rapier\\full.png'}}
+    'rapier':{'cooldown': 50, 'damage': 8, 'graphic':'.\\graphics\\weapons\\rapier\\full.png'}
+}
+
+magic_data = {
+    'flame': {'strength': 5,'cost': 20,'graphic':'.\\graphics\\particles\\flame\\flame.png'},
+	'heal' : {'strength': 20,'cost': 10,'graphic':'.\\graphics\\particles\\heal\\heal.png'}
+}
 
 monster_data = {
-    'orc':{'health':300,'exp':250,'damage':25,'speed':2,'resistance':4,'attack_radius':10,'notice_radius':100},
+    'orc':{'health':300,'exp':250,'damage':20,'speed':2,'resistance':4,'attack_radius':10,'notice_radius':100},
     'bat':{'health':60,'exp':100,'damage':5,'speed':3,'resistance':12,'attack_radius':13,'notice_radius':120}
 }
