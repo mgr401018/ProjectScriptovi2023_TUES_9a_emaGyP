@@ -1,8 +1,9 @@
-- fix lag
+- fix lag  (1)
 - heal pot
-- better ui
+- better ui	(1)
 - magic
 - better death
 - more and better enemies
 - remove unused stuff
 - particles
+- weapon switch fix (1)
