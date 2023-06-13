@@ -6,6 +6,7 @@ from debug import debug
 from support import *
 from random import choice
 from weapon import Weapon
+from ui import UI
 from enemy import Enemy
 
 class Level():
@@ -20,6 +21,8 @@ class Level():
         self.attackable_sprites = pygame.sprite.Group()
 
         self.create_map()
+
+        self.ui = UI()
 
     def create_map(self):
         layouts = {
@@ -73,7 +76,8 @@ class Level():
         self.visible_sprites.update()
         self.visible_sprites.enemy_update(self.player)
         self.player_attack_logic()
-        debug(self.player.health)
+        self.ui.display(self.player)
+        #debug(self.player.health)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
